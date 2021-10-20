@@ -6,6 +6,10 @@
 #define CAPACITY_FILE "/sys/class/power_supply/BAT1/capacity"
 #define STATUS_FILE "/sys/class/power_supply/BAT1/status"
 
+#define BATTERY_LEVEL_RESERVE 10
+#define BATTERY_LEVEL_CRITICAL 15
+#define BATTERY_LEVEL_LOW 100
+
 enum ChargingStatus {
 	Charging,
 	Discharging
@@ -37,16 +41,16 @@ int make_notification(int battery_level, int charging_status) {
 	
 	if (charging_status == Charging) {
 		return -2;
-	} else if (battery_level < 10) {
+	} else if (battery_level < BATTERY_LEVEL_RESERVE) {
 		suspend_system();
-	} else if (battery_level < 15) {
+	} else if (battery_level < BATTERY_LEVEL_CRITICAL) {
 		strcpy(title, "Battery Critical");
-		strcpy(message, "Battery charge less than 15%");
+		sprintf(message, "Battery charge less than %d%%", BATTERY_LEVEL_CRITICAL);
 		urgency = NOTIFY_URGENCY_CRITICAL;
 		retval = show_notification(title, message, urgency);
-	} else if (battery_level < 25) {
+	} else if (battery_level < BATTERY_LEVEL_LOW) {
 		strcpy(title, "Battery Low");
-		strcpy(message, "Battery charge less than 25%");
+		sprintf(message, "Battery charge less than  %d%%", BATTERY_LEVEL_LOW);
 		urgency = NOTIFY_URGENCY_NORMAL;
 		retval = show_notification(title, message, urgency);
 	}
