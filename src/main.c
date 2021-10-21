@@ -8,7 +8,7 @@
 
 #define BATTERY_LEVEL_RESERVE 10
 #define BATTERY_LEVEL_CRITICAL 15
-#define BATTERY_LEVEL_LOW 100
+#define BATTERY_LEVEL_LOW 25
 
 enum ChargingStatus { Charging, Discharging };
 
